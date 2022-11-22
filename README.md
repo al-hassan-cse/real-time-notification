@@ -1,4 +1,4 @@
-Laravel Real-Time Notifications
+## Laravel Real-Time Notifications
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
@@ -27,19 +27,27 @@ Today, many tasks happen on the backend, and we sometimes need to inform the use
 
 To achieve this, our client could ask the server every second if something new happened, or you could make use of long polling. But the best solution is to create a new communication channel through WebSockets which works in both ways.
 
-## laravel new laravel-real-time-notifications
+## Installation Process
    We start by creating a new Laravel 8, 9 application. I always recommend using the Laravel Installer for this purpose.
    laravel new laravel-real-time-notifications
+   
+   
 
 ## Step-01: Installation Laravel Websockets
    composer require beyondcode/laravel-websockets
+   
+   
  
 ## Step-02: We also need a package by Pusher.
    composer require pusher/pusher-php-server
    
+   
+   
 ## Step-03: Next, adapt your .env file. We want the BROADCAST_DRIVER to be pusher.
 
    BROADCAST_DRIVER=pusher
+   
+   
   
 ## Step-04: And we need to set the Pusher credentials.
 
@@ -47,18 +55,26 @@ To achieve this, our client could ask the server every second if something new h
    PUSHER_APP_KEY=12345
    PUSHER_APP_SECRET=12345
    PUSHER_APP_CLUSTER=mt1
+   
+   
 
 ## Step-05: The Laravel Websockets package comes with a migration file for storing statistics and a config file we need to adapt. Let's publish them.
 
    php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="migrations"
+   
+   
   
 ## Step-06: DB credentials in the .env file. Afterward, we can run the migration.
 
    php artisan migrate
+   
+   
  
 ## Step-07: We publish the config file of Laravel Websockets.
 
    php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"
+   
+   
    
 ## Step-08: Now we are ready to start the WebSockets server.
 
@@ -71,14 +87,16 @@ After clicking connect, you should see that the dashboard is subscribed to some 
 Broadcast Notifications From Our Laravel Application.
 There are two ways we can send messages from our backend to the WebSockets server:
 
-## Laravel Events
-## Laravel Notifications
+Laravel Events
+Laravel Notifications
 
 
 
 ## Step-09: Let's create a new event with artisan.
 
    php artisan make:event RealTimeMessage
+   
+   
  
 ## Step-10: Here is what we need to change:
 
@@ -106,6 +124,8 @@ There are two ways we can send messages from our backend to the WebSockets serve
         }
     }
     
+    
+    
  ## Step-11: Before we can try sending this event, please adapt your broadcasting.php config file to use the following options:
 
     'options' => [
@@ -116,12 +136,18 @@ There are two ways we can send messages from our backend to the WebSockets serve
         'scheme' => 'http'
     ],
     
+    
+    
  ## Step-12: You could also create a route and run the command there.
 
     event(new App\Events\RealTimeMessage('Hello World'));
     
+    
+    
  ## Step-13: Listen To Messages From Our Front-end
     npm install --save-dev laravel-echo pusher-js
+    
+    
     
  ## Step-14: resouces/js/bootstrap.js file of Laravel already contains a code snippet for creating a new instance of Laravel Echo we can use.
  
@@ -137,6 +163,8 @@ There are two ways we can send messages from our backend to the WebSockets serve
         wsHost: window.location.hostname,
         wsPort: 6001,
     });
+    
+    
     
  ## Step-15: Now import the script. We are going to use Laravel's welcome view for our tutorial. So add the app.js file into your view
     <script src="{{ asset('js/app.js') }}"></script>
